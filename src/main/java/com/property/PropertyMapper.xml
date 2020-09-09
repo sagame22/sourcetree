@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+        <mapper namespace="com.property.PropertyDAO">
+       
+        <insert id="add" parameterType="com.property.PropertyVO" useGeneratedKeys="false">
+        <selectKey resultType="int" order="BEFORE" keyProperty="propertyId">
+        select PROPERTYID_SEQ.nextval from dual
+        </selectKey>
+        insert into Property
+        values(#{propertyId},#{categoryVO.categoryId},#{name})
+        </insert>
+        
+        <update id="update" parameterType="com.property.PropertyVO">
+        update Property set
+        cid= #{categoryVO.categoryId}, name=#{name} where propertyid = #{propertyId}
+        </update>
+        
+        <delete id="delete" parameterType="int">
+        delete from Property where propertyid = #{propertyId}
+        </delete>
+        
+        <select id="get" resultMap="manyto1">
+        select * from Property p
+        join category c
+        on p.cid=c.categoryid
+        where propertyid = #{propertyId}
+        </select>
+        <select id="list"  resultMap="manyto1">
+        select * from Property p
+        join category c
+        on p.cid=c.categoryid
+        where cid = #{categoryId} order by rownum desc 
+        </select>
+        
+        
+        <resultMap id="manyto1"  type="com.property.PropertyVO" >
+        <result property="name" column="name"/>
+        <result property="propertyId" column="propertyId"/>
+			<association property="categoryVO" javaType="com.category.CategoryVO">
+				<result property="categoryId" column="cid"/>
+				<result property="cname" column="cname"/>
+			</association>
+    	</resultMap>
+        
+       
+        </mapper>

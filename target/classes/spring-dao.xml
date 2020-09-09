@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:context="http://www.springframework.org/schema/context"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 1.加載properties -->
+		<!--  <context:property-placeholder
+		location="classpath:database.properties"/>  -->
+
+	<!-- 2.連線池 -->
+	  <!--  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+       <property name="driverClass" value="${jdbc.driver}"/>
+       <property name="jdbcUrl" value="${jdbc.url}"/>
+       <property name="user" value="${jdbc.username}"/>
+       <property name="password" value="${jdbc.password}"/>  -->
+
+	
+       <!-- c3p0連線池屬性 -->
+      <!--  <property name="maxPoolSize" value="30"/>
+       <property name="minPoolSize" value="10"/>
+       關閉連接後不自動commit
+       <property name="autoCommitOnClose" value="false"/>
+       獲取連線超時設定
+       <property name="checkoutTimeout" value="10000"/>
+       獲取失敗重試次數
+       <property name="acquireRetryAttempts" value="2"/> -->
+       
+   <!-- </bean> -->
+  
+   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+     <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+     <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+     <property name="username" value="&quot;Mybatis&quot;"/>
+     <property name="password" value="123456"/>
+  </bean>  
+  
+	<!--3.配置SqlSessionFactory对象 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!--注入數據庫連接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 配置MyBaties全局配置文件:mybatis-config.xml -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<!-- 配置掃描mapper.xml -->
+		<!-- <property name="mapperLocations" value="classpath:com/category/*.xml"/>-->
+	</bean>
+		
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+    
+      <!-- 注入Template到daoimpl,若用4.的掃描這裡就不用配 -->
+     <!-- <bean id="memberDAOImpl" class="com.member.MemberDAOImpl">
+      <property name="sessionTemplate" ref="sqlSessionTemplate"/>
+    </bean>   -->
+
+	<!-- 4.配置掃描Dao接口包，動態實現Dao接口(daoIpml)注入到spring容器中 -->
+	<!--解释 ：https://www.cnblogs.com/jpfss/p/7799806.html -->
+	  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 注入sqlSessionFactory -->
+		<property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate" />
+		<!-- 需要掃描的Dao接口包 -->
+		<property name="basePackage" value="com.category,com.member,
+		com.order,com.orderitem,com.product,com.productimage,com.property
+		,com.propertyvalue,com.review" />
+	  </bean>  
+
+
+</beans>

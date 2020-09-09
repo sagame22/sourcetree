@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+       PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+       "http://mybatis.org/dtd/mybatis-3-config.dtd">
+       
+<configuration>
+
+	<settings>
+		<setting name="logImpl" value="LOG4J" />
+	</settings>
+	<!-- <typeAliases>
+		<package name="com.sowei.pojo" />
+	</typeAliases> -->
+	<mappers>
+		<mapper resource="com/member/MemberMapper.xml" />
+		<mapper resource="com/category/CategoryMapper.xml" />
+		<mapper resource="com/order/OrderMapper.xml" />
+		<mapper resource="com/orderitem/OrderItemMapper.xml" />
+		<mapper resource="com/product/ProductMapper.xml" />
+		<mapper resource="com/productimage/ProductImageMapper.xml" />
+		<mapper resource="com/property/PropertyMapper.xml" />
+		<mapper resource="com/propertyvalue/PropertyValueMapper.xml" />
+		<mapper resource="com/review/ReviewMapper.xml" />  
+	</mappers>
+	
+</configuration>

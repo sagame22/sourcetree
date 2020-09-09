@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.order.OrderDAO">
+
+
+
+	<insert id="add" parameterType="com.order.OrderVO" useGeneratedKeys="false">
+		<selectKey resultType="int" order="BEFORE" keyProperty="orderId">
+			select ORDERID_SEQ.nextval from dual
+		</selectKey>
+		insert into Order_
+		values(#{orderId},#{orderCode},#{address},#{post},#{receiver},#{mobile},
+		#{userMessage},#{orderDate,jdbcType=TIMESTAMP},#{payDate,jdbcType=TIMESTAMP},#{deliveryDate,jdbcType=TIMESTAMP},
+		#{confirmDate,jdbcType=TIMESTAMP},#{member.memberId},#{status})
+	</insert>
+
+	<update id="update" parameterType="com.order.OrderVO">
+		update Order_ set
+		address=
+		#{address}, post=#{post}, receiver=#{receiver},mobile=#{mobile},
+		userMessage=#{userMessage} ,orderDate =
+		#{orderDate,jdbcType=TIMESTAMP} ,
+		payDate
+		=#{payDate,jdbcType=TIMESTAMP} , deliveryDate
+		=#{deliveryDate,jdbcType=TIMESTAMP},
+		confirmDate =
+		#{confirmDate,jdbcType=TIMESTAMP} , OrderCode =#{orderCode},
+		mid=#{member.memberId}, status=#{status} where orderid = #{orderId}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		delete from Order_ where
+		Orderid = #{orderId}
+	</delete>
+
+	<select id="get" resultMap="manyto1">
+		select * from Order_ where
+		Orderid = #{orderId}
+	</select>
+
+	<select id="list" resultMap="manyto1">
+		select * from Order_ Order by
+		Orderid desc
+	</select>
+
+	<select id="list2" resultMap="manyto1">
+		select * from Order_ where mid =
+		#{uid} and status != #{status} Order by orderid desc
+	</select>
+
+	<resultMap id="manyto1"  type="com.order.OrderVO" >
+        <result property="orderId" column="orderId"/>
+        <result property="orderCode" column="orderCode"/>
+        <result property="post" column="post"/>
+        <result property="mobile" column="mobile"/>
+        <result property="userMessage" column="userMessage"/>
+        <result property="orderDate" column="orderDate"/>
+        <result property="payDate" column="payDate"/>
+        <result property="deliveryDate" column="deliveryDate"/>
+        <result property="confirmDate" column="confirmDate"/>
+        <result property="status" column="status"/>
+        <result property="address" column="address"/>
+        <result property="receiver" column="receiver"/>
+       <!--  <result property="totalNumber" column="totalNumber"/>
+        <result property="total" column="total"/>
+        <result property="orderItems" column="orderItems"/> -->
+			<association property="member" javaType="com.member.MemberVO">
+				<result property="memberId" column="mid"/>
+			</association>
+     </resultMap>
+
+
+</mapper>

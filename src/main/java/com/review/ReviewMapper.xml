@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+        <mapper namespace="com.review.ReviewDAO">
+        
+        <select id="getTotal" resultType="int">
+        select count(*) from Review where pid = #{pid}
+        </select>  
+        
+        <insert id="add" parameterType="com.review.ReviewVO" useGeneratedKeys="false" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="reviewId">
+        select REVIEWID_SEQ.nextval from dual
+        </selectKey>
+        insert into Review values(#{reviewId},#{content},#{memberVO.memberId},
+        #{productVO.productId},#{reviewDate,jdbcType=TIMESTAMP})
+        </insert>
+        
+        <update id="update" parameterType="com.review.ReviewVO">
+        update Review set content= #{content}, mid=#{memberVO.memberId},
+        pid=#{productVO.productId} , reviewDate = #{reviewDate,jdbcType=TIMESTAMP} 
+        where reviewid = #{reviewId}
+        </update>
+        
+        <delete id="delete" parameterType="int">
+        delete from Review where Reviewid = #{id}
+        </delete>
+        
+        <select id="get" resultMap="manyto1">
+        select * from review r
+        join product p on r.pid=p.productid
+        join member m on r.mid=m.memberid 
+        join category c on c.categoryid=p.cid
+        where Reviewid = #{id}
+        </select>
+        
+        <select id="list"  resultMap="manyto1">
+        select * from review r
+        join product p on r.pid=p.productid
+        join member m on r.mid=m.memberid 
+        join category c on c.categoryid=p.cid
+        where pid = #{pid} order by rownum desc
+        </select>
+        
+        <select id="getCount" resultType="int" >
+        select count(*) from Review where pid = #{pid}
+        </select>
+        
+        <select id="isExist" resultType="int" >
+        select count(*) from Review where content = #{content} and pid = #{pid}
+        </select>
+      
+        
+        <resultMap id="manyto1"  type="com.review.ReviewVO" >
+        <result property="reviewId" column="reviewId"/>
+        <result property="content" column="content"/>
+        <result property="reviewDate" column="reviewDate"/>
+       		 <!-- ****************product對象**************** -->
+			<association property="product" javaType="com.product.ProductVO">
+				<result property="productId" column="productId"/>
+				<result property="pname" column="pname"/>
+				<result property="subTitle" column="subTitle"/>
+				<result property="orignalPrice" column="orignalPrice"/>
+				<result property="promotePrice" column="promotePrice"/>
+				<result property="stock" column="stock"/>
+				<result property="createDate" column="createDate"/>
+					<association property="categoryVO" javaType="com.category.CategoryVO">
+						<result property="categoryId" column="categoryId"/>
+						<result property="cname" column="cname"/>
+					</association>
+			</association>
+			<!-- ****************member對象**************** -->
+			<association property="member" javaType="com.member.MemberVO">
+				<result property="memberId" column="memberId"/>
+				<result property="mname" column="mname"/>
+				<result property="password" column="password"/>
+			</association>
+			
+     </resultMap> 
+        
+       
+        </mapper>

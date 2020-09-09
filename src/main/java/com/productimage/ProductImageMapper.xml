@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+        <mapper namespace="com.productimage.ProductImageDAO">
+        
+               
+        <insert id="add" parameterType="com.productimage.ProductImageVO" useGeneratedKeys="false">
+        <selectKey resultType="int" order="BEFORE" keyProperty="imageId">
+        select PRODUCTIMAGEID_SEQ.nextval from dual
+        </selectKey>
+        insert into ProductImage
+        values(#{imageId},#{product.productId},#{type})
+        </insert>
+         
+        <delete id="delete" parameterType="int">
+        delete from ProductImage where imageid = #{piid}
+        </delete>
+        
+        <select id="get" resultMap="manyto1">
+        select * from ProductImage pi
+        join product p
+        on pi.pid=p.productid
+        join category c
+        on p.cid=c.categoryid
+        where imageid = #{piid}
+        </select>
+        
+        <select id="list"  resultMap="manyto1">
+        select * from ProductImage pi
+        join product p
+        on pi.pid=p.productid
+        join category c
+        on p.cid=c.categoryid
+        where pid =#{product.productId} and type =#{type} order by rownum desc
+        </select>
+        
+        <resultMap id="manyto1"  type="com.productimage.ProductImageVO" >
+        <result property="imageId" column="imageId"/>
+        <result property="type" column="type"/>
+			<association property="product" javaType="com.product.ProductVO">
+				<result property="productId" column="pid"/>
+        		<result property="pname" column="pname"/>
+        		<result property="subTitle" column="subTitle"/>
+       		    <result property="orignalPrice" column="orignalPrice"/>
+        		<result property="promotePrice" column="promotePrice"/>
+        		<result property="stock" column="stock"/>
+        		<result property="createDate" column="createDate"/>
+       		 	<!-- ****************category對象**************** -->
+					<association property="categoryVO" javaType="com.category.CategoryVO">
+						<result property="categoryId" column="categoryId"/>
+						<result property="cname" column="cname"/>
+					</association>
+			</association>
+    	</resultMap>
+    	
+       
+        </mapper>

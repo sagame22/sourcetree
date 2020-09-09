@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+        <mapper namespace="com.orderitem.OrderItemDAO">
+          
+        <insert id="add" parameterType="com.orderitem.OrderItemVO" useGeneratedKeys="false" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="orderItemId">
+        select ORDERITEMID_SEQ.nextval from dual
+        </selectKey>
+        insert into OrderItem 
+        values(#{orderItemId},#{product.productId},
+        <if test="order!=null">
+        #{order.orderId}
+        </if>
+        <if test="order==null">
+        -1
+        </if>
+        ,#{member.memberId},#{count})
+        </insert>
+        
+        <update id="update" parameterType="com.orderitem.OrderItemVO">
+        update OrderItem set pid= #{product.productId}, 
+        <if test="order.orderId!=null">
+        oid=#{order.orderId}
+        </if>
+        <if test="order.orderId==null">
+        oid=-1
+        </if>
+        , mid=#{member.memberId},
+        count=#{count}  where OrderItemid = #{orderItemId}
+        </update>
+        
+        <delete id="delete" parameterType="int">
+        delete from OrderItem where OrderItemid = #{orderItemId}
+        </delete>
+        
+        <select id="get" resultMap="manyto1">
+        select * from OrderItem oi
+        join product p on oi.pid=p.productid
+        join member m on oi.mid=m.memberid 
+        where oi.OrderItemid = #{orderItemId}
+        </select>
+        
+        <select id="listByUser"  resultMap="manyto1">
+        select * from OrderItem oi
+        join product p on oi.pid=p.productid
+        join member m on oi.mid=m.memberid 
+        where mid = #{memberId} and oid=-1 order by OrderItemid desc
+        </select>
+        
+        <select id="listByOrder" resultMap="manyto1" >
+        select * from OrderItem oi
+        join product p on oi.pid=p.productid
+        join member m on oi.mid=m.memberid 
+        where oid = #{orderId} order by OrderItemid desc
+        </select>
+        
+        <select id="listByProduct" resultMap="manyto1" >
+        select * from OrderItem oi
+        join product p on oi.pid=p.productid
+        join member m on oi.mid=m.memberid 
+        where pid = #{productId} order by OrderItemid desc
+        
+        </select>
+        
+        <select id="getSaleCount" resultType="Integer">
+		select sum(count) from OrderItem where pid = #{productId}
+        </select>
+        
+        
+        <resultMap id="manyto1"  type="com.orderitem.OrderItemVO" >
+        <result property="count" column="count"/>
+        <result property="orderItemId" column="orderItemId"/>
+       		 <!-- ****************product對象**************** -->
+			<association property="product" javaType="com.product.ProductVO">
+				<result property="productId" column="productId"/>
+				<result property="pname" column="pname"/>
+				<result property="subTitle" column="subTitle"/>
+				<result property="orignalPrice" column="orignalPrice"/>
+				<result property="promotePrice" column="promotePrice"/>
+				<result property="stock" column="stock"/>
+				<result property="createDate" column="createDate"/>
+					<association property="categoryVO" javaType="com.category.CategoryVO">
+				<result property="categoryId" column="cid"/>
+					</association>
+			</association>
+			<!-- ****************order對象**************** -->
+			<association property="order" javaType="com.order.OrderVO">
+       			<result property="orderId" column="oid"/>
+			<!-- 	<result property="orderCode" column="orderCode"/>
+        	    <result property="post" column="post"/>
+        	    <result property="mobile" column="mobile"/>
+        		<result property="userMessage" column="userMessage"/>
+        		<result property="orderDate" column="orderDate"/>
+        		<result property="payDate" column="payDate"/>
+        		<result property="deliveryDate" column="deliveryDate"/>
+        		<result property="confirmDate" column="confirmDate"/>
+        		<result property="status" column="status"/>
+        		<result property="address" column="address"/>
+        		<result property="receiver" column="receiver"/>
+       			<result property="totalNumber" column="totalNumber"/>
+        		<result property="total" column="total"/>
+        		<result property="orderItems" column="orderItems"/> 
+					<association property="member" javaType="com.member.MemberVO">
+						<result property="memberId" column="mid"/>
+					</association> -->
+			</association>
+			<!-- ****************member對象**************** -->
+			<association property="member" javaType="com.member.MemberVO">
+				<result property="memberId" column="mid"/>
+				<result property="mname" column="mname"/>
+				<result property="password" column="password"/>
+			</association>
+			
+     </resultMap> 
+        
+       
+        </mapper>

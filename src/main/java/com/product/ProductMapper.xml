@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+        <mapper namespace="com.product.ProductDAO">
+          
+        <insert id="add" parameterType="com.product.ProductVO" useGeneratedKeys="false" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="productId">
+        select PRODUCTID_SEQ.nextval from dual
+        </selectKey>
+        insert into Product values(#{productId},#{pname},#{subTitle},#{orignalPrice},
+        #{promotePrice},#{stock},#{categoryVO.categoryId},#{createDate,jdbcType=TIMESTAMP})
+        </insert>
+        
+        <update id="update" parameterType="com.product.ProductVO">
+        update Product set pname= #{pname}, subTitle=#{subTitle}, orignalPrice=#{orignalPrice},
+        promotePrice=#{promotePrice},stock=#{stock}, cid = #{categoryVO.categoryId},
+        createDate=#{createDate,jdbcType=TIMESTAMP} where PRODUCTID = #{productId}
+        </update>
+        
+        <delete id="delete" parameterType="int">
+        delete from Product where productid = #{productId}
+        </delete>
+        
+        <select id="get" resultMap="manyto1">
+        select * from Product p
+        join category c 
+        on p.cid=c.categoryId 
+        where Productid = #{productId}
+        </select>
+        
+        <select id="list"  resultMap="manyto1">
+        select * from Product p
+        join category c 
+        on p.cid=c.categoryId 
+        where cid = #{categoryId} order by rownum desc 
+        </select>
+        
+        <select id="list1" resultMap="manyto1" >
+        select * from Product p
+        join category c 
+        on p.cid=c.categoryId 
+        </select>
+        
+        <select id="search" resultMap="manyto1" >
+		select * from Product p
+        join category c 
+        on p.cid=c.categoryId 
+        where pname like #{keyword}      
+        </select>
+        
+       
+        
+        
+        <resultMap id="manyto1"  type="com.product.ProductVO" >
+        <result property="productId" column="productId"/>
+        <result property="pname" column="pname"/>
+        <result property="subTitle" column="subTitle"/>
+        <result property="orignalPrice" column="orignalPrice"/>
+        <result property="promotePrice" column="promotePrice"/>
+        <result property="stock" column="stock"/>
+        <result property="createDate" column="createDate"/>
+       		 <!-- ****************category對象**************** -->
+			<association property="categoryVO" javaType="com.category.CategoryVO">
+				<result property="categoryId" column="cid"/>
+				<result property="cname" column="cname"/>
+			</association>
+						
+     	</resultMap> 
+        
+       
+        </mapper>
