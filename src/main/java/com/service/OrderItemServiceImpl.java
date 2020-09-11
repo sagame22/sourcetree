@@ -15,7 +15,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 	private OrderItemDAO orderItemDAOImpl;
 	@Autowired
 	private OrderDAO orderDAOImpl;
-	
+	@Autowired
+	private ProductService productService;
 	public void setOrderDAO(OrderDAO orderDAOImpl) {
 		this.orderDAOImpl = orderDAOImpl;
 	}
@@ -46,6 +47,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 	public OrderItemVO get(int id) {
 		OrderItemVO orderItemVO = orderItemDAOImpl.get(id);
 		int oid = orderItemVO.getOrder().getOrderId();
+		productService.setFirstProductImage(orderItemVO.getProduct());
 		if(oid>0) {
 			OrderVO order= orderDAOImpl.get(oid);
 			orderItemVO.setOrder(order);
@@ -56,13 +58,16 @@ public class OrderItemServiceImpl implements OrderItemService {
 	@Override
 	public List<OrderItemVO> listByUser(int uid) {
 		List<OrderItemVO> listByUser = orderItemDAOImpl.listByUser(uid);
-		
+		for(OrderItemVO oi:listByUser)
+			productService.setFirstProductImage(oi.getProduct());
 		return listByUser;
 	}
 
 	@Override
 	public List<OrderItemVO> listByOrder(int oid) {
 		List<OrderItemVO> listByOrder = orderItemDAOImpl.listByOrder(oid);
+		for(OrderItemVO oi:listByOrder)
+		productService.setFirstProductImage(oi.getProduct());
 		return listByOrder;
 	}
 	
@@ -70,6 +75,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 	public List<OrderItemVO> listByProduct(int pid) {
 		List<OrderItemVO> listByProduct = orderItemDAOImpl.listByProduct(pid);
 		for(OrderItemVO oi:listByProduct) {
+			productService.setFirstProductImage(oi.getProduct());
 			int oid = oi.getOrder().getOrderId();
 			if(oid>0) {
 				OrderVO order = orderDAOImpl.get(oid);

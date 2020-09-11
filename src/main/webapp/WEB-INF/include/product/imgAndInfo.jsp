@@ -44,9 +44,11 @@ $(function(){
 	            		var addCartpage = "${pageContext.request.contextPath}/fore/addCart";
 	            		$.get(
 	            				addCartpage,
-	            	            {"pid":pid,"num":num},
+	            	            {"productId":pid,"num":num},
 	            	            function(result){
 	            	            	if("success"==result){
+	            	            		var cartnum = parseInt($(".cartNumber").text())+parseInt(num);
+	            	            		$(".cartNumber").text(cartnum);
 	            	            		$(".addCartButton").html("已加入購物車");
 	            	            		$(".addCartButton").attr("disabled","disabled");
 	            	            		$(".addCartButton").css("background-color","lightgray")
@@ -174,14 +176,14 @@ $(function(){
 					<span class="originalPriceYuan">NT$</span>
 					<span class="originalPrice">
 					
-						<fmt:formatNumber type="number" value="${p.orignalPrice}" minFractionDigits="2"/>					
+						<fmt:formatNumber type="number" value="${p.orignalPrice}" />					
 					</span>
 				</div>
 				<div class="promotionDiv">
 					<span class="promotionPriceDesc">促銷價 </span>
 					<span class="promotionPriceYuan">$</span>
 					<span class="promotionPrice">
-						<fmt:formatNumber type="number" value="${p.promotePrice}" minFractionDigits="2"/>
+						<fmt:formatNumber type="number" value="${p.promotePrice}" />
 					</span>				
 				</div>
 			</div>
@@ -225,7 +227,7 @@ $(function(){
 		</div>	
 		
 		<div class="buyDiv">
-			<a class="buyLink" href="${pageContext.request.contextPath}/fore/buyone?pid=${p.productId}"><button class="buyButton">立即購買</button></a>
+			<a class="buyLink" href="${pageContext.request.contextPath}/fore/buyone?productId=${p.productId}"><button class="buyButton">立即購買</button></a>
 			<a href="#nowhere" class="addCartLink"><button class="addCartButton"><span class="glyphicon glyphicon-shopping-cart"></span>加入購物車</button></a>
 		</div>
 	</div>

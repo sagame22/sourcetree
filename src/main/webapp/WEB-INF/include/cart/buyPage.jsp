@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <div class="buyPageDiv">
-  <form action="forecreateOrder" method="post">
+  <form action="${pageContext.request.contextPath}/fore/createOrder" method="post">
   
 	<div class="buyFlow">
-		<img class="pull-left" src="img/site/simpleLogo.png">
-		<img class="pull-right" src="img/site/buyflow.png">
+		<img class="pull-left" src="${pageContext.request.contextPath}/img/site/simpleLogo.png">
+		<img class="pull-right" src="${pageContext.request.contextPath}/img/site/buyflow.png">
 		<div style="clear:both"></div>
 	</div>
 	<div class="address">
@@ -33,13 +33,6 @@
 			</table>
 			
 		</div>
-
-
-
-
-		
-		
-		
 	
 	</div>
 	<div class="productList">
@@ -50,7 +43,7 @@
 			<thead>
 				<tr>
 					<th colspan="2" class="productListTableFirstColumn">
-						<a class="marketLink" href="#nowhere">Yulin小舖</a>
+						<a class="marketLink" href="#nowhere">Yuling時尚</a>
 						<a class="wangwanglink" href="#nowhere"> <span class="wangwangGif"></span> </a>
 					</th>
 					<th>單價</th>
@@ -69,16 +62,16 @@
 			<tbody class="productListTableTbody">
 				<c:forEach items="${ois}" var="oi" varStatus="st" >
 					<tr class="orderItemTR">
-						<td class="orderItemFirstTD"><img class="orderItemImg" src="img/productSingle_middle/${oi.product.firstProductImage.imageId}.jpg"></td>
+						<td class="orderItemFirstTD"><img class="orderItemImg" src="${pageContext.request.contextPath}/img/productSingle_middle/${oi.product.firstProductImage.imageId}.jpg"></td>
 						<td class="orderItemProductInfo">
-						<a  href="foreproduct?pid=${oi.product.productId}" class="orderItemProductLink">
-							${oi.product.name}
+						<a  href="${pageContext.request.contextPath}fore/product?productId=${oi.product.productId}" class="orderItemProductLink">
+							${oi.product.pname}
 						</a>
 						
 						
-							<img src="img/site/creditcard.png" title="支援信用卡支付">
-							<img src="img/site/7day.png" title="七天無條件退貨">
-							<img src="img/site/promise.png" title="產品誠實描述">
+							<img src="${pageContext.request.contextPath}/img/site/creditcard.png" title="支援信用卡支付">
+							<img src="${pageContext.request.contextPath}/img/site/7day.png" title="七天無條件退貨">
+							<img src="${pageContext.request.contextPath}/img/site/promise.png" title="誠實商品">
 						
 						</td>
 						<td>
@@ -111,22 +104,17 @@
 			</tbody>
 			
 		</table>
-		<div class="orderItemSumDiv">
+	<div class="orderItemSumDiv">
 			<div class="pull-left">
 				<span class="leaveMessageText">給店家留言:</span>
+				
 				<span class="leaveMessageTextareaSpan">
-					<textarea name="userMessage" class="leaveMessageTextarea"></textarea>
-					<div>
-						<span>可輸入200字</span>
-					</div>
+						
 				</span>
+			<textarea name="userMessage" ></textarea>
 			</div>
 			
-			<span class="pull-right">店鋪合計(含運費): NT$<fmt:formatNumber type="number" value="${total}" />元</span>
-		</div>
-		
-
-				
+			<span class="pull-right">合計(含運費): NT$<fmt:formatNumber type="number" value="${total}" />元</span>
 	
 	</div>
 

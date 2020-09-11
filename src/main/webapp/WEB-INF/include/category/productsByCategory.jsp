@@ -26,11 +26,11 @@
 				<a  class="tmallLink" href="${pageContext.request.contextPath}fore/product?productId=${p.productId}">專賣</a>
 	
 				<div class="show1 productInfo">
-					<span class="monthDeal ">月成交 <span class="productDealNumber">${p.saleCount}筆</span></span>
+					<span class="monthDeal ">月銷售 <span class="productDealNumber">${p.saleCount}筆</span></span>
 					<span class="productReview">評價<span class="productReviewNumber">${p.reviewCount}</span></span>
 					<span class="wangwang">
 					<a class="wangwanglink" href="#nowhere">
-						<img src="${pageContext.request.contextPath}/img/site/wangwang.png">
+						<img src="${pageContext.request.contextPath}/img/site/wangwang.png" style="margin-bottom: 5px;">
 					</a>
 					
 					</span>

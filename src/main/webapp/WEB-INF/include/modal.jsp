@@ -5,7 +5,7 @@
 $(function(){
 	
 $("button.loginSubmitButton").click(function(){
-	var name = $("#mname").val();
+	var name = $("#name").val();
 	var password = $("#password").val();
 	
 	if(0==name.length||0==password.length){
@@ -16,7 +16,7 @@ $("button.loginSubmitButton").click(function(){
 	var page = "${pageContext.request.contextPath}/fore/loginAjax";
 	$.get(
             page,
-            {"mname":mname,"password":password},
+            {"mname":name,"password":password},
             function(result){
             	if("success"==result){
             		location.reload();
@@ -49,7 +49,7 @@ $("button.loginSubmitButton").click(function(){
 							<span class="loginInputIcon ">
 								<span class=" glyphicon glyphicon-user"></span>
 							</span>
-							<input id="name" name="mname" placeholder="會員名稱/郵件" type="text">			
+							<input id="name" name="name" placeholder="會員名稱/郵件" type="text">			
 						</div>
 						
 						<div class="loginInput " >

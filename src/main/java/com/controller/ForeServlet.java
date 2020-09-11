@@ -1,7 +1,9 @@
 package com.controller;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import com.comparator.ProductPriceComparator;
 import com.comparator.ProductReviewComparator;
 import com.comparator.ProductSaleCountComparator;
 import com.member.MemberVO;
+import com.orderitem.OrderItemVO;
 import com.product.ProductVO;
 import com.productimage.ProductImageVO;
 import com.propertyvalue.PropertyValueVO;
@@ -26,7 +29,7 @@ import com.review.ReviewVO;
 import com.service.ProductImageServiceImpl;
 
 @Controller
-@SessionAttributes(value= {"member"})
+@SessionAttributes(value= {"member","ois","cartTotalItemNumber"})
 @RequestMapping("/fore")
 public class ForeServlet extends FatherServlet {
 	
@@ -98,7 +101,7 @@ public class ForeServlet extends FatherServlet {
 		return "fail";
 	} 
 	@RequestMapping("/loginAjax")
-	public String loginAjax(String mname ,String password,Model m) {
+	public @ResponseBody String loginAjax(String mname ,String password,Model m) {
 		MemberVO member = memberService.get(mname,password);
 		if(null==member){
 			return "fail";	
@@ -114,10 +117,12 @@ public class ForeServlet extends FatherServlet {
 		if(null!=sort){
 		switch(sort){
 			case "review":
-				Collections.sort(c.getProducts(),new ProductReviewComparator());
+				Collections.sort(c.getProducts(),(p1,p2)->(p2.getReviewCount()-p1.getReviewCount()));
 				break;
 			case "date" :
-				Collections.sort(c.getProducts(),new ProductDateComparator());
+				List<ProductVO> list = c.getProducts().stream()
+				.sorted((p1,p2)->(p1.getCreateDate().compareTo(p2.getCreateDate()))).collect(Collectors.toList());
+				c.setProducts(list);
 				break;
 			case "saleCount" :
 				Collections.sort(c.getProducts(),new ProductSaleCountComparator());
@@ -134,105 +139,96 @@ public class ForeServlet extends FatherServlet {
 		m.addAttribute("c", c);
 		return "forward:/frontpage/category.jsp";		
 	}	
-	
+	@RequestMapping("search")
 	public String search(String keyword,Model m){
 		List<ProductVO> ps= productService.search(keyword);
 		productService.setSaleAndReviewNumber(ps);
 		m.addAttribute("ps",ps);
 		return "forward:/frontpage/searchResult.jsp";
 	}	
-	
-//	public String buyone(HttpServletRequest request, HttpServletResponse response) {
-//		//取得產品ID和數量加入該產品VO
-//		int pid = Integer.parseInt(request.getParameter("pid"));
-//		int num = Integer.parseInt(request.getParameter("num"));
-//		ProductVO p = productDAO.get(pid);
-//		int oiid = 0;
-//		//取得會員編號,用會員編號查詢該會員的訂單細項
-//		MemberVO member =(MemberVO) request.getSession().getAttribute("member");
-//		//定義一個flag,若是相同產品則改為true,反之
-//		boolean found = false;
-//		List<OrderItemVO> ois = orderItemDAO.listByUser(member.getMemberId());
-//		//將訂單細項取出比對,若產品相同則將產品數量累加
-//		
-//		for (OrderItemVO oi : ois) {
-//			if(oi.getProduct().getProductId()==p.getProductId()){
-//				oi.setCount(oi.getCount()+num);
-//				//將訂單明細新增
-//				orderItemDAO.update(oi);
-//				found = true;
-//				//取得該訂單明細的ID
-//				oiid = oi.getOrderItemId();
-//				break;
-//			}
-//		}		
-//		//若不是相同產品則new新的細項VO(產品數量/會員ID/產品VO)
-//		if(!found){
-//			OrderItemVO oi = new OrderItemVO();
-//			oi.setMember(member);
-//			oi.setCount(num);
-//			oi.setProduct(p);
-//			oiid = orderItemDAO.add(oi);
-//		}
-//		return "@forebuy?oiid="+oiid;
-//	}
-//	
-//	public String addCart(HttpServletRequest request, HttpServletResponse response) {
-//		//取的產品編號查詢產品VO和所選取的數量
-//		int pid = Integer.parseInt(request.getParameter("pid"));
-//		ProductVO p = productDAO.get(pid);
-//		int num = Integer.parseInt(request.getParameter("num"));
-//		//取得Session中的會員VO
-//		MemberVO member =(MemberVO) request.getSession().getAttribute("member");
-//		boolean found = false;
-//		//取出會員已新增的訂單明細,判斷產品若相同則數量進行修改
-//		List<OrderItemVO> ois = orderItemDAO.listByUser(member.getMemberId());
-//		for (OrderItemVO oi : ois) {
-//			if(oi.getProduct().getProductId()==p.getProductId()){
-//				oi.setCount(oi.getCount()+num);
-//				orderItemDAO.update(oi);
-//				found = true;
-//				break;
-//			}
-//		}		
-//		
-//		//若是新產品則new一個新的細項新增到資料庫
-//		if(!found){
-//			OrderItemVO oi = new OrderItemVO();
-//			oi.setMember(member);
-//			oi.setCount(num);
-//			oi.setProduct(p);
-//			orderItemDAO.add(oi);
-//		}
-//		return "%success";
-//	}
-//	public String buy(HttpServletRequest request, HttpServletResponse response){
-//		//取得所有訂單明細
-//		String[] oiids=request.getParameterValues("oiid");
-//		//創建一個放訂單VO的list
-//		List<OrderItemVO> ois = new ArrayList<>();
-//		float total = 0;
-//		//將取得到訂單明細編號轉為INT,並遍歷取出對應的訂單VO
-//		for (String strid : oiids) {
-//			int oiid = Integer.parseInt(strid);
-//			OrderItemVO oi= orderItemDAO.get(oiid);
-//			//取出訂單中的產品的價格*數量計算總金額
-//			total +=oi.getProduct().getPromotePrice()*oi.getCount();
-//			ois.add(oi);
-//		}
-//		//把所有訂單明細和金額存入轉發至結帳頁面
-//		request.getSession().setAttribute("ois", ois);
-//		request.setAttribute("total", total);
-//		return "buy.jsp";
-//	}	
-//	
-//	public String cart(HttpServletRequest request, HttpServletResponse response) {
-//		//獲取會員編號查詢該會員的訂單明細
-//		MemberVO member =(MemberVO) request.getSession().getAttribute("member");
-//		List<OrderItemVO> ois = orderItemDAO.listByUser(member.getMemberId());
-//		request.setAttribute("ois", ois);
-//		return "cart.jsp";
-//	}	
+	@RequestMapping("buyone")
+	public String buyone(int productId,int num,ModelMap mp) {
+		ProductVO p = productService.get(productId);
+		MemberVO member =(MemberVO)mp.get("member");
+		int oiid = 0;
+		//定義一個flag,若是相同產品則改為true
+		boolean found = false;
+		//取得會員編號,用會員編號查詢該會員的訂單細項
+		List<OrderItemVO> ois = orderItemService.listByUser(member.getMemberId());
+		//將訂單細項取出比對,若產品相同則將產品數量累加
+		for (OrderItemVO oi : ois) {
+			if(oi.getProduct().getProductId()==p.getProductId()){
+				oi.setCount(oi.getCount()+num);
+				//將訂單明細新增
+				orderItemService.update(oi);
+				found = true;
+				oiid = oi.getOrderItemId();
+				break;
+			}
+		}		
+		//若不是相同產品
+		if(!found){
+			OrderItemVO oi = new OrderItemVO();
+			oi.setMember(member);
+			oi.setCount(num);
+			oi.setProduct(p);
+			oiid = orderItemService.add(oi);
+		}
+		return "redirect:/fore/buy?oiid="+oiid;
+	}
+	@RequestMapping("addCart")
+	public @ResponseBody String addCart(int productId , int num,ModelMap mp) {
+		ProductVO p = productService.get(productId);
+		MemberVO member =(MemberVO) mp.get("member");
+		
+		boolean found = false;
+		//取會員的購物車內容
+		List<OrderItemVO> ois = orderItemService.listByUser(member.getMemberId());
+		
+		for (OrderItemVO oi : ois) {
+			if(oi.getProduct().getProductId()==p.getProductId()){
+				oi.setCount(oi.getCount()+num);
+				orderItemService.update(oi);
+				found = true;
+				break;
+			}
+		}		
+//		mp.addAttribute("cartTotalItemNumber",ois.size());
+		//無購物車內容
+		if(!found){
+			OrderItemVO oi = new OrderItemVO();
+			oi.setMember(member);
+			oi.setCount(num);
+			oi.setProduct(p);
+			orderItemService.add(oi);
+		}
+		return "success";
+	}
+	@RequestMapping("buy")
+	public String buy(int[] oiid,Model m){
+		//取得所有訂單明細
+		//創建一個放訂單VO的list
+		List<OrderItemVO> ois = new ArrayList<>();
+		int total = 0;
+		for (int oi_id : oiid) {
+			OrderItemVO oi= orderItemService.get(oi_id);
+			//取出訂單中的產品的價格*數量計算總金額
+			total +=oi.getProduct().getPromotePrice()*oi.getCount();
+			ois.add(oi);
+		}
+		//把所有訂單明細和金額存入轉發至結帳頁面
+		m.addAttribute("ois", ois);
+		m.addAttribute("total", total);
+		return "forward:/frontpage/buy.jsp";
+	}	
+	@RequestMapping("cart")
+	public String cart(ModelMap mp) {
+		//獲取會員編號查詢該會員的訂單明細
+		MemberVO member =(MemberVO) mp.get("member");
+		List<OrderItemVO> ois = orderItemService.listByUser(member.getMemberId());
+		mp.addAttribute("ois", ois);
+		return "forward:/frontpage/cart.jsp";
+	}	
 //	
 //	 public String changeOrderItem(HttpServletRequest request, HttpServletResponse response) {
 //		 	//取出會員編號,若無返回fail重新登錄

@@ -6,7 +6,8 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        https://www.springframework.org/schema/context/spring-context.xsd">
-
+ 	<!--開啟注解模式-->
+<!--     <context:annotation-config /> -->
 	<!-- 1.加載properties -->
 		<!--  <context:property-placeholder
 		location="classpath:database.properties"/>  -->

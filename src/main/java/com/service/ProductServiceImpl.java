@@ -133,6 +133,8 @@ public class ProductServiceImpl implements ProductService {
             return new ArrayList<ProductVO>();
         
 		List<ProductVO> search = productDAOImpl.search("%"+keyword+"%");
+		for(ProductVO pv:search)
+			this.setFirstProductImage(pv);
 		return search;
 	}
 	

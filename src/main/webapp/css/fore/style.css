@@ -8,7 +8,7 @@ body {
 	font-size: 16px;
 	font-family: Arial;
 	min-width:1024px;
-/* 	width:1920px; */
+ 	/* width:1250px;  */
 }
 
 a {
@@ -65,8 +65,8 @@ nav.top div.row div {
 
 div.searchDiv {
 	width: 400px;
-	margin-right:130px;
-	margin-left:240px;
+	margin-right:240px;
+	margin-left:160px;
 	margin-bottom:0px;
 	margin-top:7px;
 	padding: 1px;
@@ -121,7 +121,7 @@ div.carousel-inner div.item img{
 }
 
 div.categoryWithCarousel div.categoryMenu {
-	width: 163px;
+	width: 120px;
 	background-color: #e2e2e3;
 	/* 	padding-bottom:10px; */
 	margin-left: 0px;
@@ -132,7 +132,7 @@ div.categoryWithCarousel div.categoryMenu {
 }
 
 div.categoryWithCarousel div.productsAsideCategorys {
-	width: 1200px;
+	width: 1040px;
 	height: 510px;
 	background-color: rgba(55,55,55,0.8);
 	/* 	padding-bottom:10px; */
@@ -926,7 +926,7 @@ div.productNumber span.updown {
     width: 20px;
     height: 14px;
     text-align: center;
-    padding-top:2px;
+    padding-top:1px;
 }
 
 div.productNumber span.updownMiddle {
@@ -1324,7 +1324,7 @@ div.orderItemSumDiv {
 	padding: 20px;
 	border-top: 2px solid #B4D0FF;
 	background-color: #F2F6FF;
-	height: 50px;
+	height: 77px;
 }
 
 textarea.leaveMessageTextarea {

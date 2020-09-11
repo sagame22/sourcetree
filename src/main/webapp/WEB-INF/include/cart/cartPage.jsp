@@ -20,7 +20,7 @@ $(function(){
 	
 	$('#deleteConfirmModal').on('hidden.bs.modal', function (e) {
 		if(deleteOrderItem){
-			var page="foredeleteOrderItem";
+			var page="${pageContext.request.contextPath}/fore/deleteOrderItem";
 			$.post(
 				    page,
 				    {"oiid":deleteOrderItemid},
@@ -29,7 +29,7 @@ $(function(){
 							$("tr.cartProductItemTR[oiid="+deleteOrderItemid+"]").hide();
 						}
 						else{
-							location.href="login.jsp";
+							location.href="${pageContext.request.contextPath}/frontpage/login.jsp";
 						}
 				    }
 				);
@@ -40,12 +40,12 @@ $(function(){
 	$("img.cartProductItemIfSelected").click(function(){
 		var selectit = $(this).attr("selectit")
 		if("selectit"==selectit){
-			$(this).attr("src","img/site/cartNotSelected.png");
+			$(this).attr("src","${pageContext.request.contextPath}/img/site/cartNotSelected.png");
 			$(this).attr("selectit","false")
 			$(this).parents("tr.cartProductItemTR").css("background-color","#fff");
 		}
 		else{
-			$(this).attr("src","img/site/cartSelected.png");
+			$(this).attr("src","${pageContext.request.contextPath}/img/site/cartSelected.png");
 			$(this).attr("selectit","selectit")
 			$(this).parents("tr.cartProductItemTR").css("background-color","#FFF8E1");
 		}
@@ -56,19 +56,19 @@ $(function(){
 	$("img.selectAllItem").click(function(){
 		var selectit = $(this).attr("selectit")
 		if("selectit"==selectit){
-			$("img.selectAllItem").attr("src","img/site/cartNotSelected.png");
+			$("img.selectAllItem").attr("src","${pageContext.request.contextPath}/img/site/cartNotSelected.png");
 			$("img.selectAllItem").attr("selectit","false")
 			$(".cartProductItemIfSelected").each(function(){
-				$(this).attr("src","img/site/cartNotSelected.png");
+				$(this).attr("src","${pageContext.request.contextPath}/img/site/cartNotSelected.png");
 				$(this).attr("selectit","false");
 				$(this).parents("tr.cartProductItemTR").css("background-color","#fff");
 			});			
 		}
 		else{
-			$("img.selectAllItem").attr("src","img/site/cartSelected.png");
+			$("img.selectAllItem").attr("src","${pageContext.request.contextPath}/img/site/cartSelected.png");
 			$("img.selectAllItem").attr("selectit","selectit")
 			$(".cartProductItemIfSelected").each(function(){
-				$(this).attr("src","img/site/cartSelected.png");
+				$(this).attr("src","${pageContext.request.contextPath}/img/site/cartSelected.png");
 				$(this).attr("selectit","selectit");
 				$(this).parents("tr.cartProductItemTR").css("background-color","#FFF8E1");
 			});				
@@ -129,7 +129,7 @@ $(function(){
 			}
 		});
 		params = params.substring(1);
-		location.href="forebuy?"+params;
+		location.href="${pageContext.request.contextPath}/fore/buy?"+params;
 	});
 	
 	
@@ -163,9 +163,9 @@ function syncSelect(){
 	});
 	
 	if(selectAll)
-		$("img.selectAllItem").attr("src","img/site/cartSelected.png");
+		$("img.selectAllItem").attr("src","${pageContext.request.contextPath}/img/site/cartSelected.png");
 	else
-		$("img.selectAllItem").attr("src","img/site/cartNotSelected.png");
+		$("img.selectAllItem").attr("src","${pageContext.request.contextPath}/img/site/cartNotSelected.png");
 	
 	
 	
@@ -179,6 +179,7 @@ function calcCartSumPriceAndNumber(){
 		console.log(price);
 		price = price.replace("NT$", "");
 		price = price.replace("元", "");
+		price = price.replace(",", "");
 		sum += new Number(price);	
 		
 		var num =$(".orderItemNumberSetting[oiid="+oiid+"]").val();
@@ -196,7 +197,7 @@ function syncPrice(pid,num,price){
 	$(".cartProductItemSmallSumPrice[pid="+pid+"]").html("NT$"+cartProductItemSmallSumPrice);
 	calcCartSumPriceAndNumber();
 	
-	var page = "forechangeOrderItem";
+	var page = "${pageContext.request.contextPath}/fore/changeOrderItem";
 	$.post(
 		    page,
 		    {"pid":pid,"count":num},
@@ -214,7 +215,7 @@ function syncPrice(pid,num,price){
 <div class="cartDiv">
 	<div class="cartTitle pull-right">
 		<span>已選商品  (不含運費)</span>
-		<span class="cartTitlePrice">NT$0.00</span>
+		<span class="cartTitlePrice">NT$0</span>
 		<button class="createOrderButton" disabled="disabled">結 算</button>
 	</div>
 	
@@ -224,7 +225,7 @@ function syncPrice(pid,num,price){
 			<thead>
 				<tr>
 					<th class="selectAndImage">
-							<img selectit="false" class="selectAllItem" src="img/site/cartNotSelected.png">				
+							<img selectit="false" class="selectAllItem" src="${pageContext.request.contextPath}/img/site/cartNotSelected.png">				
 					全選
 					
 					</th>
@@ -236,16 +237,16 @@ function syncPrice(pid,num,price){
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${ois }" var="oi">
+				<c:forEach items="${ois}" var="oi">
 					<tr oiid="${oi.orderItemId}" class="cartProductItemTR">
 						<td>
-							<img selectit="false" oiid="${oi.orderItemId}" class="cartProductItemIfSelected" src="img/site/cartNotSelected.png">
-							<a style="display:none" href="#nowhere"><img src="img/site/cartSelected.png"></a>
-							<img class="cartProductImg"  src="img/productSingle_middle/${oi.product.firstProductImage.imageId}.jpg">
+							<img selectit="false" oiid="${oi.orderItemId}" class="cartProductItemIfSelected" src="${pageContext.request.contextPath}/img/site/cartNotSelected.png">
+							<a style="display:none" href="#nowhere"><img src="${pageContext.request.contextPath}/img/site/cartSelected.png"></a>
+							<img class="cartProductImg"  src="${pageContext.request.contextPath}/img/productSingle_middle/${oi.product.firstProductImage.imageId}.jpg">
 						</td>
 						<td>
 							<div class="cartProductLinkOutDiv" Style="line-height:80px;">
-								<a href="foreproduct?pid=${oi.product.productId}" class="cartProductLink">${oi.product.name}</a>
+								<a href="${pageContext.request.contextPath}/fore/product?pid=${oi.product.productId}" class="cartProductLink">${oi.product.pname}</a>
 							</div>
 							
 						</td>
@@ -282,7 +283,7 @@ function syncPrice(pid,num,price){
 	</div>
 	
 	<div class="cartFoot">
-		<img selectit="false" class="selectAllItem" src="img/site/cartNotSelected.png">
+		<img selectit="false" class="selectAllItem" src="${pageContext.request.contextPath}/img/site/cartNotSelected.png">
 		<span>全選</span>
 <!-- 		<a href="#">删除</a> -->
 		

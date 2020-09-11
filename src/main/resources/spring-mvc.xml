@@ -11,9 +11,9 @@
    https://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
    <!-- 配置SpringMVC -->
-   <!-- 1.开启SpringMVC注解驱动 -->
-   <mvc:annotation-driven />
-   <!-- 2.静态资源默认servlet配置-->
+   <!-- 1.開啟spring註解驅動 -->
+     <mvc:annotation-driven /> 
+   <!-- 2.靜態資源默認servlet配置-->
    <mvc:default-servlet-handler/>
 
    <!-- 3.配置jsp ViewResolver解析器 -->
@@ -25,5 +25,22 @@
 
    <!-- 4.掃描web相關的bean -->
    <context:component-scan base-package="com.controller" />
+   <!-- 5.配置攔截器 -->
+   <mvc:interceptors>
+    <!--  <bean id ="authInterceptor" class="com.interceptor.AuthInterceptor"/> -->
+	<mvc:interceptor >
+		<mvc:mapping path="/fore/*"/>
+        <mvc:exclude-mapping path="/fore/home"/>
+        <mvc:exclude-mapping path="/fore/checklogin"/>
+        <mvc:exclude-mapping path="/fore/resgister"/>
+        <mvc:exclude-mapping path="/fore/loginAjax"/>
+        <mvc:exclude-mapping path="/fore/login"/>
+        <mvc:exclude-mapping path="/fore/product"/>
+        <mvc:exclude-mapping path="/fore/category"/>
+        <mvc:exclude-mapping path="/fore/search"/> 
+        <bean  class="com.interceptor.AuthInterceptor"/>
+	</mvc:interceptor>    
+    
+	</mvc:interceptors>
 
 </beans>
