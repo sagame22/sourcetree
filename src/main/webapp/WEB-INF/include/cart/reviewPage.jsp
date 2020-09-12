@@ -3,10 +3,10 @@
 	
 <div class="reviewDiv">
 	<div class="reviewProductInfoDiv">
-		<div class="reviewProductInfoImg"><img width="400px" height="400px" src="img/productSingle/${p.firstProductImage.imageId}.jpg"></div>
+		<div class="reviewProductInfoImg"><img width="400px" height="400px" src="${pageContext.request.contextPath}/img/productSingle/${p.firstProductImage.imageId}.jpg"></div>
 		<div class="reviewProductInfoRightDiv">
 			<div class="reviewProductInfoRightText">
-				${p.name}
+				${p.pname}
 			</div>
 			<table class="reviewProductInfoTable">
 				<tr>
@@ -24,7 +24,7 @@
 			</table>
 			
 			<div class="reviewProductInfoRightBelowDiv">
-				<span class="reviewProductInfoRightBelowImg"><img1 src="img/site/reviewLight.png"></span>
+				<span class="reviewProductInfoRightBelowImg"><img1 src="${pageContext.request.contextPath}/img/site/waring.png"></span>
 				<span class="reviewProductInfoRightBelowText" >現在查看的是 您所購買的商品訊息
 				<fmt:formatDate value="${o.orderDate}" pattern="yyyy年MM月dd"/>下單購買了此商品 </span>
 			
@@ -58,7 +58,7 @@
 	
 	<c:if test="${param.showonly!=true}">
 		<div class="makeReviewDiv">
-		<form method="post" action="foredoreview">
+		<form method="post" action="${pageContext.request.contextPath}/fore/doreview">
 			<div class="makeReviewText">請提供你的建議,是給我們的最大支持！</div>
 			<table class="makeReviewTable">
 				<tr>
@@ -67,9 +67,9 @@
 				</tr>
 			</table>
 			<div class="makeReviewButtonDiv">
-				<input type="hidden" name="oid" value="${o.orderId}">
-				<input type="hidden" name="pid" value="${p.productId}">
-				<button class="btn" type="submit">提 交</button>
+				<input type="hidden" name="orderId" value="${o.orderId}">
+				<input type="hidden" name="productId" value="${p.productId}">
+				<button Style="background-color:black;color:white;" class="btn " type="submit">提 交</button>
 			</div>
 		</form>
 		</div>	

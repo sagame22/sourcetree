@@ -80,11 +80,11 @@ $(function(){
 									<c:forEach items="${o.orderItems}" var="oi">
 										<tr>
 											<td align="left">
-												<img width="40px" height="40px" src="img/productSingle/${oi.product.firstProductImage.imageId}.jpg">
+												<img width="40px" height="40px" src="${pageContext.request.contextPath}/img/productSingle/${oi.product.firstProductImage.imageId}.jpg">
 											</td>	
 											
 											<td>
-												<a href="foreproduct?productId=${oi.product.productId}">
+												<a href="${pageContext.request.contextPath}/fore/product?productId=${oi.product.productId}">
 													<span>${oi.product.pname}</span>
 												</a>											
 											</td>

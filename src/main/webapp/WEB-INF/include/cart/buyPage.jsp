@@ -42,14 +42,13 @@
 		<table class="productListTable">
 			<thead>
 				<tr>
-					<th colspan="2" class="productListTableFirstColumn">
-						<a class="marketLink" href="#nowhere">Yuling時尚</a>
-						<a class="wangwanglink" href="#nowhere"> <span class="wangwangGif"></span> </a>
+					<th colspan="2" class="orderTest" >
+						訂單商品
 					</th>
 					<th>單價</th>
 					<th>數量</th>
 					<th>小計</th>
-					<th>配送方式</th>
+					<th>寄送方式</th>
 				</tr>
 				<tr class="rowborder">
 					<td  colspan="2" ></td>
@@ -69,10 +68,10 @@
 						</a>
 						
 						
-							<img src="${pageContext.request.contextPath}/img/site/creditcard.png" title="支援信用卡支付">
+						 	<img src="${pageContext.request.contextPath}/img/site/creditcard.png" title="支援信用卡支付">
 							<img src="${pageContext.request.contextPath}/img/site/7day.png" title="七天無條件退貨">
 							<img src="${pageContext.request.contextPath}/img/site/promise.png" title="誠實商品">
-						
+						 
 						</td>
 						<td>
 						

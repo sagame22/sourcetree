@@ -5,6 +5,7 @@
 <script>
 var deleteOrderItem = false;
 var deleteOrderItemid = 0;
+
 $(function(){
 
 	$("a.deleteOrderItem").click(function(){
@@ -154,6 +155,7 @@ function syncCreateOrderButton(){
 	}
 		
 }
+
 function syncSelect(){
 	var selectAll = true;
 	$(".cartProductItemIfSelected").each(function(){
@@ -203,7 +205,7 @@ function syncPrice(pid,num,price){
 		    {"pid":pid,"count":num},
 		    function(result){
 				if("success"!=result){
-					location.href="login.jsp";
+					location.href="${pageContext.request.contextPath}/frontpage/login.jsp";
 				}
 		    }
 		);
@@ -261,14 +263,14 @@ function syncPrice(pid,num,price){
 								<span class="hidden orderItemStock " pid="${oi.product.productId}">${oi.product.stock}</span>
 								<span class="hidden orderItemPromotePrice " pid="${oi.product.productId}">${oi.product.promotePrice}</span>
 								<a  pid="${oi.product.productId}" class="numberMinus" href="#nowhere">-</a>
-								<input pid="${oi.product.productId}" oiid="${oi.orderItemId}" class="orderItemNumberSetting" autocomplete="off" value="${oi.count}">
+								<input pid="${oi.product.productId}" oiid="${oi.orderItemId}" class="orderItemNumberSetting" autocomplete="off" value="${oi.count}" >
 								<a  stock="${oi.product.stock}" pid="${oi.product.productId}" class="numberPlus" href="#nowhere">+</a>
 							</div>					
 						
 						 </td>
 						<td >
 							<span class="cartProductItemSmallSumPrice" oiid="${oi.orderItemId}" pid="${oi.product.productId}" >
-							NT$<fmt:formatNumber type="number" value="${oi.product.promotePrice*oi.count}"/>元
+							NT$<fmt:formatNumber type="number" value="${oi.product.promotePrice*oi.count}"/>
 							</span>
 						
 						</td>

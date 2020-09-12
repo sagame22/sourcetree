@@ -37,18 +37,24 @@
 	</delete>
 
 	<select id="get" resultMap="manyto1">
-		select * from Order_ where
-		Orderid = #{orderId}
+		select * from Order_ o
+		join member p 
+		on o.mid = p.memberid 
+		where Orderid = #{orderId}
 	</select>
 
 	<select id="list" resultMap="manyto1">
-		select * from Order_ Order by
-		Orderid desc
+		select * from Order_ o
+		join member p 
+		on o.mid = p.memberid
+	    order by Orderid desc
 	</select>
 
 	<select id="list2" resultMap="manyto1">
-		select * from Order_ where mid =
-		#{uid} and status != #{status} Order by orderid desc
+		select * from Order_ o
+		join member p 
+		on o.mid = p.memberid 
+		where mid = #{uid} and status != #{status} Order by orderid desc
 	</select>
 
 	<resultMap id="manyto1"  type="com.order.OrderVO" >
@@ -69,6 +75,7 @@
         <result property="orderItems" column="orderItems"/> -->
 			<association property="member" javaType="com.member.MemberVO">
 				<result property="memberId" column="mid"/>
+				<result property="mname" column="mname"/>
 			</association>
      </resultMap>
 

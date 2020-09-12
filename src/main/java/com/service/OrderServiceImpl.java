@@ -23,8 +23,8 @@ public class OrderServiceImpl implements OrderService{
 	}
 	@Override
 	public int add(OrderVO bean) {
-		int add = orderDAOImpl.add(bean);
-		return add;
+		orderDAOImpl.add(bean);
+		return bean.getOrderId();
 	}
 	@Override
 	public void update(OrderVO bean) {

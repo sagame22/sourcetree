@@ -3,7 +3,7 @@
 	
 <div class="orderFinishDiv">
 	<div class="orderFinishTextDiv">
-		<img src="img/site/orderFinish.png">
+		<img src="${pageContext.request.contextPath}/img/site/orderFinish.png">
 		<span>交易成功，已收到您的款項。</span>
 	</div>
 </div>

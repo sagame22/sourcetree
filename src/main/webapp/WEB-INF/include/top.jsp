@@ -23,7 +23,7 @@
 			<a href="${pageContext.request.contextPath}/fore/bought">我的訂單</a>
 			<a href="${pageContext.request.contextPath}/fore/cart">
 			<span style="color:#C40000;margin:0px" class=" glyphicon glyphicon-shopping-cart redColor"></span>
-			購物車<strong class="cartNumber">${cartTotalItemNumber}</strong>件</a>		
+			購物車<strong class="cartNumber">${cartTotalItemNumber eq null?"0":cartTotalItemNumber}</strong>件</a>		
 		</span>
 		
 		

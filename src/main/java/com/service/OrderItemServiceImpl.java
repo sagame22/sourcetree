@@ -27,8 +27,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 	@Override
 	public int add(OrderItemVO bean) {
-		int add = orderItemDAOImpl.add(bean);
-		return add;
+		orderItemDAOImpl.add(bean);
+		return bean.getOrderItemId();
 	}
 
 	@Override

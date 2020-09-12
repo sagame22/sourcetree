@@ -3,35 +3,39 @@
 <script>
 //登陸的ajax
 $(function(){
-	
-$("button.loginSubmitButton").click(function(){
-	var name = $("#name").val();
-	var password = $("#password").val();
-	
-	if(0==name.length||0==password.length){
-		$("span.errorMessage").html("請輸入帳號密碼");
-		$("div.loginErrorMessageDiv").show();			
-		return false;
+	function login(){
+		var name = $("#name").val();
+		var password = $("#passwordModal").val();
+		
+		if(0==name.length||0==password.length){
+			$("span.errorMessage").html("請輸入帳號密碼");
+			$("div.loginErrorMessageDiv").show();			
+			return false;
+		}
+		var page = "${pageContext.request.contextPath}/fore/loginAjax";
+		$.get(
+	            page,
+	            {"mname":name,"password":password},
+	            function(result){
+	            	if("success"==result){
+	            		location.reload();
+	            	}
+	            	else{
+	            		$("span.errorMessage").html("帳號密碼錯誤");
+	            		$("div.loginErrorMessageDiv").show();	            		
+	            	}
+	            }
+		);			
+		return true;
 	}
-	var page = "${pageContext.request.contextPath}/fore/loginAjax";
-	$.get(
-            page,
-            {"mname":name,"password":password},
-            function(result){
-            	if("success"==result){
-            		location.reload();
-            	}
-            	else{
-            		$("span.errorMessage").html("帳號密碼錯誤");
-            		$("div.loginErrorMessageDiv").show();	            		
-            	}
-            }
-	);			
-	return true;
-});
+	
+ $("#passwordModal").keypress(function (e){
+	if(e.which==13)
+		login();
+	})
+$("button.loginSubmitButton").click(login);
 
 });
-
 </script>
 <div class="modal " id="loginModal" tabindex="-1" role="dialog" >
 	<div class="modal-dialog loginDivInProductPageModalDiv">
@@ -56,7 +60,7 @@ $("button.loginSubmitButton").click(function(){
 							<span class="loginInputIcon ">
 								<span class=" glyphicon glyphicon-lock"></span>
 							</span>
-							<input id="password" name="password"  type="password" placeholder="密碼" type="text">			
+							<input id="passwordModal" name="password"  type="password" placeholder="密碼" type="text">			
 						</div>
 									<span class="text-danger"></span><br><br>
 						<div>
@@ -71,6 +75,7 @@ $("button.loginSubmitButton").click(function(){
 	</div>
 </div>
 
+<!-- 刪除的model -->
 <div class="modal" id="deleteConfirmModal" tabindex="-1" role="dialog" >
 	<div class="modal-dialog deleteConfirmModalDiv">
        <div class="modal-content">

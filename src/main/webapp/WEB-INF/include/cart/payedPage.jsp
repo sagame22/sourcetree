@@ -3,7 +3,7 @@
 	
 <div class="payedDiv">
 	<div class="payedTextDiv">
-		<img src="img/site/paySuccess.png">
+		<img src="${pageContext.request.contextPath}/img/site/paySuccess.png">
 		<span>你已成功付款</span> 
 		
 	</div>
@@ -18,8 +18,8 @@
 				
 		<div class="paedCheckLinkDiv">
 			你可以
-			<a class="payedCheckLink" href="forebought">查看已購買商品</a>
-			<a class="payedCheckLink" href="forebought">查看交易詳情 </a>
+			<a class="payedCheckLink" href="${pageContext.request.contextPath}/fore/bought">查看已購買商品</a>
+			<a class="payedCheckLink" href="${pageContext.request.contextPath}/fore/bought">查看交易詳情 </a>
 		</div>
 			
 	</div>
@@ -28,7 +28,7 @@
 	</div>
 	
 	<div class="warningDiv">
-		<img src="img/site/warning.png">
+		<img src="${pageContext.request.contextPath}/img/site/warning.png">
 		<b>安全提醒：</b>下單後，<span class="redColor boldWord"></span>嚴防假冒客服電話詐騙！
 	</div>
 

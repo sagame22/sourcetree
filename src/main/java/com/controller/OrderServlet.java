@@ -33,7 +33,7 @@ public class OrderServlet extends FatherServlet {
 		//修改訂單狀態
 		o.setStatus(OrderServiceImpl.waitConfirm);
 		orderService.update(o);
-		return "redirec:/redirect/listOrder.jsp";
+		return "redirect:/redirect/listOrder.jsp";
 	}
 
 	

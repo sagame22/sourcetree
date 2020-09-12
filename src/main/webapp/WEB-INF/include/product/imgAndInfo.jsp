@@ -47,8 +47,8 @@ $(function(){
 	            	            {"productId":pid,"num":num},
 	            	            function(result){
 	            	            	if("success"==result){
-	            	            		var cartnum = parseInt($(".cartNumber").text())+parseInt(num);
-	            	            		$(".cartNumber").text(cartnum);
+	            	            				var cartnum = parseInt($(".cartNumber").text())+parseInt(num);
+	    	            	            		$(".cartNumber").text(cartnum);
 	            	            		$(".addCartButton").html("已加入購物車");
 	            	            		$(".addCartButton").attr("disabled","disabled");
 	            	            		$(".addCartButton").css("background-color","lightgray")

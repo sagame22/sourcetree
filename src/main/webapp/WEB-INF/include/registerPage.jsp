@@ -37,10 +37,10 @@ $(function(){
 })
 </script>
 
+<img id="loginBackgroundImg" class="loginBackgroundImg" src="${pageContext.request.contextPath}/img/site/loginBackground.png" style="
+    width: 1263px;height: 500px;">
 
-
-<form method="post" action="${pageContext.request.contextPath}/fore/register" class="registerForm">
-
+<form  method="post" action="${pageContext.request.contextPath}/fore/register" class="registerForm">
 
 <div class="registerDiv">
 	<div class="registerErrorMessageDiv">
@@ -74,7 +74,7 @@ $(function(){
 				
 		<tr>
 			<td colspan="2" class="registerButtonTD">
-				<button type="submit">提交</button>
+				<button Style="background-color:black;color:white;" class="btn btn-block blackbtn" type="submit">提交</button>
 			</td>
 		</tr>				
 	</table>

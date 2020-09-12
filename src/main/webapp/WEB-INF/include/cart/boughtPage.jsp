@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
+	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
 <script>
@@ -34,7 +35,7 @@ $(function(){
 	
 	$('#deleteConfirmModal').on('hidden.bs.modal', function (e) {
 		if(deleteOrder){
-			var page="foredeleteOrder";
+			var page="${pageContext.request.contextPath}/fore/deleteOrder";
 			$.post(
 				    page,
 				    {"oid":deleteOrderid},
@@ -99,7 +100,7 @@ $(function(){
 					<span>訂單號: ${o.orderCode} 
 					</span>
 					</td>
-					<td  colspan="2"><img width="13px" src="img/site/orderItemTmall.png">Yulin時裝</td>
+					<td  colspan="2"><img width="13px" src="${pageContext.request.contextPath}/img/site/orderItemTmall.png">Y&L</td>
 					<td colspan="1">
 						
 					</td>
@@ -112,15 +113,15 @@ $(function(){
 				</tr>
 				<c:forEach items="${o.orderItems}" var="oi" varStatus="st">
 					<tr class="orderItemProductInfoPartTR" >
-						<td class="orderItemProductInfoPartTD"><img width="80" height="80" src="img/productSingle_middle/${oi.product.firstProductImage.imageId}.jpg"></td>
+						<td class="orderItemProductInfoPartTD"><img width="80" height="80" src="${pageContext.request.contextPath}/img/productSingle_middle/${oi.product.firstProductImage.imageId}.jpg"></td>
 						<td class="orderItemProductInfoPartTD">
 							<div class="orderListItemProductLinkOutDiv">
-								<a href="foreproduct?pid=${oi.product.productId}">${oi.product.name}</a>
-								<div class="orderListItemProductLinkInnerDiv">
-											<img src="img/site/creditcard.png" title="支持信用卡支付">
-											<img src="img/site/7day.png" title="七天無條件退貨">
-											<img src="img/site/promise.png" title="產品如實">						
-								</div>
+								<a href="${pageContext.request.contextPath}/fore/product?productId=${oi.product.productId}">${oi.product.pname}</a>
+								<%-- <div class="orderListItemProductLinkInnerDiv">
+											<img src="${pageContext.request.contextPath}/img/site/creditcard.png" title="支持信用卡支付">
+											<img src="${pageContext.request.contextPath}/img/site/7day.png" title="七天無條件退貨">
+											<img src="${pageContext.request.contextPath}/img/site/promise.png" title="產品如實">					
+								</div> --%>	
 							</div>
 						</td>
 						<td  class="orderItemProductInfoPartTD" width="100px">
@@ -137,16 +138,16 @@ $(function(){
 							</td>
 							<td valign="top" rowspan="${fn:length(o.orderItems)}" width="120px" class="orderListItemProductRealPriceTD orderItemOrderInfoPartTD">
 								<div class="orderListItemProductRealPrice">NT$<fmt:formatNumber  maxFractionDigits="2" type="number" value="${o.total}"/>元</div>
-								<div class="orderListItemPriceWithTransport">(含運：NT$0.00)</div>
+								<div class="orderListItemPriceWithTransport">(含運：NT$0)</div>
 							</td>
 							<td valign="top" rowspan="${fn:length(o.orderItems)}" class="orderListItemButtonTD orderItemOrderInfoPartTD" width="100px">
 								<c:if test="${o.status=='waitConfirm' }">
-									<a href="foreconfirmPay?oid=${o.orderId}">
+									<a href="${pageContext.request.contextPath}/fore/confirmPay?oid=${o.orderId}">
 										<button class="orderListItemConfirm">確認收貨</button>
 									</a>
 								</c:if>
 								<c:if test="${o.status=='waitPay' }">
-									<a href="forealipay?oid=${o.orderId}&total=${o.total}">
+									<a href="${pageContext.request.contextPath}/fore/alipay?oid=${o.orderId}&total=${o.total}">
 										<button class="orderListItemConfirm">付款</button>
 									</a>								
 								</c:if>
@@ -158,7 +159,7 @@ $(function(){
 								</c:if>
 
 								<c:if test="${o.status=='waitReview' }">
-									<a href="forereview?oid=${o.orderId}">
+									<a href="${pageContext.request.contextPath}/fore/review?oid=${o.orderId}">
 										<button  class="orderListItemReview">評價</button>
 									</a>
 								</c:if>

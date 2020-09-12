@@ -3,7 +3,7 @@
 
 <%@include file="/WEB-INF/include/header.jsp"%>
 <%@include file="/WEB-INF/include/top.jsp"%>
-<%@include file="/WEB-INF/include/simpleSearch.jsp"%>
+<%@include file="/WEB-INF/include/search.jsp"%>
 
 <%@include file="/WEB-INF/include/cart/reviewPage.jsp"%>
 <%@include file="/WEB-INF/include/footer.jsp"%>

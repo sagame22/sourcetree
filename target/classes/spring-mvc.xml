@@ -32,14 +32,18 @@
 		<mvc:mapping path="/fore/*"/>
         <mvc:exclude-mapping path="/fore/home"/>
         <mvc:exclude-mapping path="/fore/checklogin"/>
-        <mvc:exclude-mapping path="/fore/resgister"/>
+        <mvc:exclude-mapping path="/fore/register"/>
         <mvc:exclude-mapping path="/fore/loginAjax"/>
-        <mvc:exclude-mapping path="/fore/login"/>
+        <mvc:exclude-mapping path="/fore/login"/> 
         <mvc:exclude-mapping path="/fore/product"/>
         <mvc:exclude-mapping path="/fore/category"/>
         <mvc:exclude-mapping path="/fore/search"/> 
         <bean  class="com.interceptor.AuthInterceptor"/>
 	</mvc:interceptor>    
+		<mvc:interceptor >
+		<mvc:mapping path="/fore/*"/>
+        <bean  class="com.interceptor.CartNumInterceptor"/>
+	</mvc:interceptor> 
     
 	</mvc:interceptors>
 

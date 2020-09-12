@@ -1,10 +1,12 @@
 package com.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -16,16 +18,16 @@ import org.springframework.web.util.HtmlUtils;
 
 import com.category.CategoryVO;
 import com.comparator.ProductAllComparator;
-import com.comparator.ProductDateComparator;
 import com.comparator.ProductPriceComparator;
-import com.comparator.ProductReviewComparator;
 import com.comparator.ProductSaleCountComparator;
 import com.member.MemberVO;
+import com.order.OrderVO;
 import com.orderitem.OrderItemVO;
 import com.product.ProductVO;
 import com.productimage.ProductImageVO;
 import com.propertyvalue.PropertyValueVO;
 import com.review.ReviewVO;
+import com.service.OrderServiceImpl;
 import com.service.ProductImageServiceImpl;
 
 @Controller
@@ -45,15 +47,17 @@ public class ForeServlet extends FatherServlet {
 	
 	@RequestMapping("/register")
 	public String register(MemberVO member,Model m,String status) {
+		System.out.println("777777");
 		//轉譯HTML標籤,防止惡意注入
 		String mname = HtmlUtils.htmlEscape(member.getMname());
 		boolean exist = memberService.isExist(mname);
 		if(exist){
 			m.addAttribute("msg", "用戶名已被使用");
 			return "forward:/frontpage/register.jsp";	
-		}
+		}System.out.println("6666666");
 		member.setMname(mname);
 		memberService.add(member);
+		System.out.println("55555555555");
 		return "redirect:/frontpage/registerSuccess.jsp";	
 	}	
 	
@@ -139,14 +143,14 @@ public class ForeServlet extends FatherServlet {
 		m.addAttribute("c", c);
 		return "forward:/frontpage/category.jsp";		
 	}	
-	@RequestMapping("search")
+	@RequestMapping("/search")
 	public String search(String keyword,Model m){
 		List<ProductVO> ps= productService.search(keyword);
 		productService.setSaleAndReviewNumber(ps);
 		m.addAttribute("ps",ps);
 		return "forward:/frontpage/searchResult.jsp";
 	}	
-	@RequestMapping("buyone")
+	@RequestMapping("/buyone")
 	public String buyone(int productId,int num,ModelMap mp) {
 		ProductVO p = productService.get(productId);
 		MemberVO member =(MemberVO)mp.get("member");
@@ -155,6 +159,7 @@ public class ForeServlet extends FatherServlet {
 		boolean found = false;
 		//取得會員編號,用會員編號查詢該會員的訂單細項
 		List<OrderItemVO> ois = orderItemService.listByUser(member.getMemberId());
+		
 		//將訂單細項取出比對,若產品相同則將產品數量累加
 		for (OrderItemVO oi : ois) {
 			if(oi.getProduct().getProductId()==p.getProductId()){
@@ -166,6 +171,7 @@ public class ForeServlet extends FatherServlet {
 				break;
 			}
 		}		
+		
 		//若不是相同產品
 		if(!found){
 			OrderItemVO oi = new OrderItemVO();
@@ -176,7 +182,8 @@ public class ForeServlet extends FatherServlet {
 		}
 		return "redirect:/fore/buy?oiid="+oiid;
 	}
-	@RequestMapping("addCart")
+
+	@RequestMapping("/addCart")
 	public @ResponseBody String addCart(int productId , int num,ModelMap mp) {
 		ProductVO p = productService.get(productId);
 		MemberVO member =(MemberVO) mp.get("member");
@@ -193,7 +200,6 @@ public class ForeServlet extends FatherServlet {
 				break;
 			}
 		}		
-//		mp.addAttribute("cartTotalItemNumber",ois.size());
 		//無購物車內容
 		if(!found){
 			OrderItemVO oi = new OrderItemVO();
@@ -229,165 +235,136 @@ public class ForeServlet extends FatherServlet {
 		mp.addAttribute("ois", ois);
 		return "forward:/frontpage/cart.jsp";
 	}	
-//	
-//	 public String changeOrderItem(HttpServletRequest request, HttpServletResponse response) {
-//		 	//取出會員編號,若無返回fail重新登錄
-//	        MemberVO member =(MemberVO) request.getSession().getAttribute("member");
-//	        if(null==member)
-//	            return "%fail";
-//	        //取出商品ID和數量
-//	        int pid = Integer.parseInt(request.getParameter("pid"));
-//	        int count = Integer.parseInt(request.getParameter("count"));
-//	        //取出訂單明細並新增
-//	        List<OrderItemVO> ois = orderItemDAO.listByUser(member.getMemberId());
-//	        for (OrderItemVO oi : ois) {
-//	            if(oi.getProduct().getProductId()==pid){
-//	                oi.setCount(count);
-//	                orderItemDAO.update(oi);
-//	                break;
-//	            }
-//	             
-//	        }      
-//	        return "%success";
-//	    }
-//	 public String deleteOrderItem(HttpServletRequest request, HttpServletResponse response){
-//			MemberVO member =(MemberVO) request.getSession().getAttribute("member");
-//			if(null==member)
-//				return "%fail";
-//
-//			int oiid = Integer.parseInt(request.getParameter("oiid"));
-//			List<OrderItemVO> ois = orderItemDAO.listByUser(member.getMemberId());
-//			for (OrderItemVO oi : ois) {
-//				if(oi.getOrderItemId()==oiid){
-//					orderItemDAO.delete(oiid);
-//					break;
-//				}
-//				
-//			}		
-//			return "%success";
-//		}
-//	 
-//	 public String createOrder(HttpServletRequest request, HttpServletResponse response){
-//		 //提交訂單
-//		 MemberVO member =(MemberVO) request.getSession().getAttribute("member");
-//		     //取得會員編號和訂單明細
-//		    List<OrderItemVO> ois= (List<OrderItemVO>) request.getSession().getAttribute("ois");
-//		    if(ois.isEmpty())
-//		        return "@login.jsp";
-//		 
-//		    String address = request.getParameter("address");
-//		    String post = request.getParameter("post");
-//		    String receiver = request.getParameter("receiver");
-//		    String mobile = request.getParameter("mobile");
-//		    String userMessage = request.getParameter("userMessage");
-//		     
-//		    OrderVO order = new OrderVO();
-//		    String orderCode = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) +RandomUtils.nextInt(10000);
-//		 
-//		    order.setOrderCode(orderCode);
-//		    order.setAddress(address);
-//		    order.setPost(post);
-//		    order.setReceiver(receiver);
-//		    order.setMobile(mobile);
-//		    order.setUserMessage(userMessage);
-//		    order.setOrderDate(new Date());
-//		    order.setMember(member);
-//		    order.setStatus(OrderDAOImpl.waitPay);
-//		    //新增訂單和加入ORDER的PK給多方的orderItem
-//		    int orderPK = orderDAO.add(order);
-//		    order.setOrderId(orderPK);
-//		    
-//		    float total =0;
-//		    for (OrderItemVO oi: ois) {
-//		        oi.setOrder(order);
-//		        orderItemDAO.update(oi);
-//		        total+=oi.getProduct().getPromotePrice()*oi.getCount();
-//		    }
-//		     
-//		    return "@forealipay?oid="+orderPK+"&total="+total;
-//		}
-//	 
-//	 public String alipay(HttpServletRequest request, HttpServletResponse response){
-//		    return "alipay.jsp";
-//		}
-//	 
-//	 public String payed(HttpServletRequest request, HttpServletResponse response) {
-//		    int oid = Integer.parseInt(request.getParameter("oid"));
-//		    OrderVO order = orderDAO.get(oid);
-//		    order.setStatus(OrderDAOImpl.waitDelivery);
-//		    order.setPayDate(new Date());
-//		    new OrderDAOImpl().update(order);
-//		    request.setAttribute("o", order);
-//		    return "payed.jsp";    
-//		} 
-//	 public String bought(HttpServletRequest request, HttpServletResponse response) {
-//		 	//顯示我的訂單
-//		    MemberVO member =(MemberVO) request.getSession().getAttribute("member");
-//		    
-//		    List<OrderVO> os= orderDAO.list(member.getMemberId(),OrderDAOImpl.delete);
-//		    orderItemDAO.fill(os);
-//		     
-//		    request.setAttribute("os", os);
-//		     
-//		    return "bought.jsp";       
-//		}
-//	 
-//	 public String confirmPay(HttpServletRequest request, HttpServletResponse response) {
-//			int oid = Integer.parseInt(request.getParameter("oid"));
-//			OrderVO o = orderDAO.get(oid);
-//			orderItemDAO.fill(o);
-//			request.setAttribute("o", o);
-//			return "confirmPay.jsp";		
-//		}
-//	 
-//	 public String orderConfirmed(HttpServletRequest request, HttpServletResponse response) {
-//			int oid = Integer.parseInt(request.getParameter("oid"));
-//			OrderVO o = orderDAO.get(oid);
-//			o.setStatus(OrderDAOImpl.waitReview);
-//			o.setConfirmDate(new Date());
-//			orderDAO.update(o);
-//			return "orderConfirmed.jsp";
-//		}
-//	 public String deleteOrder(HttpServletRequest request, HttpServletResponse response){
-//			int oid = Integer.parseInt(request.getParameter("oid"));
-//			OrderVO o = orderDAO.get(oid);
-//			o.setStatus(OrderDAOImpl.delete);
-//			orderDAO.update(o);
-//			return "%success";		
-//		}
-//	 public String review(HttpServletRequest request, HttpServletResponse response) {
-//		    int oid = Integer.parseInt(request.getParameter("oid"));
-//		    OrderVO o = orderDAO.get(oid);
-//		    orderItemDAO.fill(o);
-//		    ProductVO p = o.getOrderItems().get(0).getProduct();
-//		    List<ReviewVO> reviews = reviewDAO.list(p.getProductId());
-//		    productDAO.setSaleAndReviewNumber(p);
-//		    request.setAttribute("p", p);
-//		    request.setAttribute("o", o);
-//		    request.setAttribute("reviews", reviews);
-//		    return "review.jsp";       
-//		}
-//	 
-//	 public String doreview(HttpServletRequest request, HttpServletResponse response) {
-//		    int oid = Integer.parseInt(request.getParameter("oid"));
-//		    OrderVO o = orderDAO.get(oid);
-//		    o.setStatus(OrderDAOImpl.finish);
-//		    orderDAO.update(o);
-//		    int pid = Integer.parseInt(request.getParameter("pid"));
-//		    ProductVO p = productDAO.get(pid);
-//		     
-//		    String content = request.getParameter("content");
-//		     
-//		    content = HtmlUtils.htmlEscape(content);
-//		 
-//		    MemberVO member =(MemberVO) request.getSession().getAttribute("member");
-//		    ReviewVO review = new ReviewVO();
-//		    review.setContent(content);
-//		    review.setProduct(p);
-//		    review.setReviewDate(new Date());
-//		    review.setMember(member);
-//		    reviewDAO.add(review);
-//		     
-//		    return "@forereview?oid="+oid+"&showonly=true";    
-//		}
+	@RequestMapping("changeOrderItem")
+	 public @ResponseBody String changeOrderItem(ModelMap mp,int pid ,int count) {
+		 	//取出會員編號,若無返回fail重新登錄
+	        MemberVO member =(MemberVO) mp.get("member");
+	        if(null==member)
+	            return "fail";
+	        //取出會員訂單明細
+	        List<OrderItemVO> ois = orderItemService.listByUser(member.getMemberId());
+	        for (OrderItemVO oi : ois) {
+	            if(oi.getProduct().getProductId()==pid){
+	                oi.setCount(count);
+	                orderItemService.update(oi);
+	                break;
+	            }
+	             
+	        }      
+	        return "success";
+	    }
+	@RequestMapping("deleteOrderItem")
+	 public @ResponseBody String deleteOrderItem(ModelMap mp, int oiid){
+			MemberVO member =(MemberVO) mp.get("member");
+			if(null==member)
+				return "fail";
+
+			List<OrderItemVO> ois = orderItemService.listByUser(member.getMemberId());
+			for (OrderItemVO oi : ois) {
+				if(oi.getOrderItemId()==oiid){
+					orderItemService.delete(oiid);
+					break;
+				}
+				
+			}		
+			return "success";
+		}
+	@RequestMapping("createOrder")
+	 public String createOrder(OrderVO order,ModelMap mp){
+		 	MemberVO member =(MemberVO) mp.get("member");
+		     //取得會員編號和訂單明細
+		    List<OrderItemVO> ois= (List<OrderItemVO>) mp.get("ois");
+		    if(ois.isEmpty())
+		        return "redirect:/forepage/login.jsp";
+		    String orderCode = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) +RandomUtils.nextInt(10000);
+		    order.setOrderCode(orderCode);
+		    order.setOrderDate(new Date());
+		    order.setMember(member);
+		    order.setStatus(OrderServiceImpl.waitPay);
+		    //新增訂單和加入ORDER的PK給多方的orderItem
+		    int orderPK = orderService.add(order);
+		    order.setOrderId(orderPK);
+		    
+		    float total =0;
+		    for (OrderItemVO oi: ois) {
+		        oi.setOrder(order);
+		        orderItemService.update(oi);
+		        total+=oi.getProduct().getPromotePrice()*oi.getCount();
+		    }
+		     
+		    return "redirect:/fore/alipay?oid="+orderPK+"&total="+total;
+		}
+	@RequestMapping("alipay")
+	 public String alipay(){
+		    return "forward:/frontpage/alipay.jsp";
+		}
+	@RequestMapping("payed")
+	 public String payed(int oid,Model m) {
+		    OrderVO order = orderService.get(oid);
+		    order.setStatus(OrderServiceImpl.waitDelivery);
+		    order.setPayDate(new Date());
+		    orderService.update(order);
+		    m.addAttribute("o", order);
+		    return "forward:/frontpage/payed.jsp";    
+		} 
+	@RequestMapping("bought")
+	 public String bought(ModelMap m) {
+		    MemberVO member =(MemberVO) m.get("member");
+		    
+		    List<OrderVO> os= orderService.list(member.getMemberId(),OrderServiceImpl.delete);
+		    orderItemService.fill(os);
+		     
+		    m.addAttribute("os", os);
+		     
+		    return "forward:/frontpage/bought.jsp";       
+		}
+	@RequestMapping("confirmPay")
+	 public String confirmPay(int oid,Model m) {
+			OrderVO o = orderService.get(oid);
+			orderItemService.fill(o);
+			m.addAttribute("o", o);
+			return "forward:/frontpage/confirmPay.jsp";		
+		}
+	@RequestMapping("orderConfirmed")
+	 public String orderConfirmed(Model m,int oid) {
+			OrderVO o = orderService.get(oid);
+			o.setStatus(OrderServiceImpl.waitReview);
+			o.setConfirmDate(new Date());
+			orderService.update(o);
+			return "forward:/frontpage/orderConfirmed.jsp";
+		}
+	@RequestMapping("deleteOrder")
+	 public @ResponseBody String deleteOrder(int oid){
+			OrderVO o = orderService.get(oid);
+			o.setStatus(OrderServiceImpl.delete);
+			orderService.update(o);
+			return "success";		
+		}
+	@RequestMapping("review")
+	 public String review(int oid,Model m) {
+		    OrderVO o = orderService.get(oid);
+		    orderItemService.fill(o);
+		    ProductVO p = o.getOrderItems().get(0).getProduct();
+		    List<ReviewVO> reviews = reviewService.list(p.getProductId());
+		    productService.setSaleAndReviewNumber(p);
+		    m.addAttribute("p", p);
+		    m.addAttribute("o", o);
+		    m.addAttribute("reviews", reviews);
+		    return "forward:/frontpage/review.jsp";       
+		}
+	@RequestMapping("doreview")
+	 public String doreview(ReviewVO review,ModelMap mp,int orderId,int productId) {
+		    OrderVO o = orderService.get(orderId);
+		    o.setStatus(OrderServiceImpl.finish);
+		    orderService.update(o);
+		    ProductVO p = productService.get(productId);
+		 
+		    MemberVO member =(MemberVO) mp.get("member");
+		    review.setProduct(p);
+		    review.setReviewDate(new Date());
+		    review.setMember(member);
+		    reviewService.add(review);
+		     
+		    return "redirect:/fore/review?oid="+orderId+"&showonly=true";    
+		}
 }

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <script>
 $(function(){
 	$("div.productsAsideCategorys div.row a").each(function(){
@@ -18,7 +19,7 @@ $(function(){
 			<div class="row show1">
 				<c:forEach items="${ps}" var="p">
 					<c:if test="${!empty p.subTitle}">
-						<a href="foreproduct?pid=${p.productId}">
+						<a href="${pageContext.request.contextPath}/fore/product?productId=${p.productId}">
 							<c:forEach items="${fn:split(p.subTitle, ' ')}" var="title" varStatus="st">
 								<c:if test="${st.index==0}">
 									${title}

@@ -3,7 +3,7 @@
 	
 <div class="confirmPayPageDiv">
 	<div class="confirmPayImageDiv">
-		<img src="img/site/comformPayFlow.png">
+		<img src="${pageContext.request.contextPath}/img/site/comformPayFlow.png">
 		<div  class="confirmPayTime1">
 			<fmt:formatDate value="${o.orderDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 		</div>
@@ -31,9 +31,9 @@
 			</thead>
 			<c:forEach items="${o.orderItems}" var="oi">
 				<tr>
-					<td><img width="50px" src="img/productSingle_middle/${oi.product.firstProductImage.imageId}.jpg"></td>
+					<td><img width="50px" src="${pageContext.request.contextPath}/img/productSingle_middle/${oi.product.firstProductImage.imageId}.jpg"></td>
 					<td class="confirmPayOrderItemProductLink">
-						<a href="#nowhere">${oi.product.name}</a>
+						<a href="#nowhere">${oi.product.pname}</a>
 					</td>
 					<td>NT$<fmt:formatNumber type="number" value="${oi.product.orignalPrice}" />元</td>
 					<td>1</td>
@@ -58,14 +58,14 @@
 			</tr>
 			<tr>
 				<td>賣家暱稱：</td>
-				<td>Yulin時裝 </td>
+				<td>Y&L </td>
 			</tr>
 			<tr>
 				<td>收貨訊息： </td>
 				<td>${o.address}，${o.receiver}， ${o.mobile}，${o.post} </td>
 			</tr>
 			<tr>
-				<td>成交時間：</td>
+				<td>交易時間：</td>
 				<td><fmt:formatDate value="${o.orderDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 			</tr>
 		</table>
@@ -73,6 +73,6 @@
 	</div>
 	<div class="confirmPayButtonDiv">
 		<div class="confirmPayWarning">收到貨物後請確認產品是否正確！</div>
-		<a href="foreorderConfirmed?oid=${o.orderId}"><button class="confirmPayButton">確認</button></a>
+		<a href="${pageContext.request.contextPath}/fore/orderConfirmed?oid=${o.orderId}"><button class="confirmPayButton">確認</button></a>
 	</div>
 </div>

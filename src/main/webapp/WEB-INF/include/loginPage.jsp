@@ -32,13 +32,15 @@ $(function(){
 
 <div id="loginDiv" style="position: relative">
 
-	<div class="simpleLogo">
-		<a href="${pageContext.request.contextPath}/index_f.jsp"><img src="${pageContext.request.contextPath}/img/site/simpleLogo.png"></a>
-	</div>
+ 	<%-- <div class="simpleLogo">
+		<a href="${pageContext.request.contextPath}/index_f.jsp"><img src="${pageContext.request.contextPath}/img/site/simpleLogo.png" style="
+    width: 150px;"></a>
+	</div>  --%>
 
 	
-	<img id="loginBackgroundImg" class="loginBackgroundImg" src="${pageContext.request.contextPath}/img/site/loginBackground.png">
-	
+	 <img id="loginBackgroundImg" class="loginBackgroundImg" src="${pageContext.request.contextPath}/img/site/loginBackground.png" style="
+    width: 1263px;height: 500px;">
+	 
 	<form class="loginForm" action="${pageContext.request.contextPath}/fore/login" method="post">
 		<div id="loginSmallDiv" class="loginSmallDiv">
 			<div class="loginErrorMessageDiv">
@@ -69,8 +71,8 @@ $(function(){
 				<a Style="color:black;" class="notImplementLink" href="#nowhere">忘記密碼</a> 
 				<a Style="color:black;" href="${pageContext.request.contextPath}/frontpage/register.jsp" class="pull-right">免費註冊</a> 
 			</div>
-			<div style="margin-top:20px">
-				<button class="btn btn-block " type="submit">登入</button>
+			<div calss ="subbtn" style="margin-top:20px">
+				<button Style="background-color:black;color:white;" class="btn btn-block blackbtn " type="submit">登入</button>
 			</div>
 		</div>	
 	</form>

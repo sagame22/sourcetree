@@ -15,9 +15,17 @@
    			 margin-right: 0px;
    			 padding-right: -5;
    			 ">
-			<button  type="submit" class="btn" style="width: 58px;padding-left: 10px;border-left-width: 0px;
-  			border-bottom-width: 0px;border-top-width: 0px;border-right-width: 0px;height: 44px;padding-top: 7px;
+			<button  type="submit" class="btn" style="
+  			width: 58px;
+  			padding-left: 10px;
+  			border-left-width: 0px;
+  			border-bottom-width: 0px;
+  			border-top-width: 0px;
+  			border-right-width: 0px;
+  			height: 28px;
+  			padding-top: 5px;
   			margin-top: 1px;">搜尋</button>
+  			
 			<div class="searchBelow">
 				<c:forEach items="${cs}" var="c" varStatus="st">
 					<c:if test="${st.count>=2 and st.count<=8}">
