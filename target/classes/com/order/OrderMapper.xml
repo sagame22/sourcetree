@@ -76,6 +76,7 @@
 			<association property="member" javaType="com.member.MemberVO">
 				<result property="memberId" column="mid"/>
 				<result property="mname" column="mname"/>
+				<result property="password" column="password"/>
 			</association>
      </resultMap>
 

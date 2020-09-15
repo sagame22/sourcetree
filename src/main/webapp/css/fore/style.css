@@ -20,8 +20,7 @@
 	border: 1px dotted skyblue !important;
 }
 .searchDiv .keyword{
-	border-radius:10px;
-   	border-right-width: 3px;  
+   	border-right-width: 1px;  
    	margin-right: 0px;
     padding-right: -5;
     margin-top: 11px;
@@ -1775,6 +1774,8 @@ div.orderListItemProductLinkOutDiv {
 	height: 80px;
 	font-size:12px;
 	line-height:80px;
+    width: 80px;
+
 }
 
 div.orderListItemProductLinkInnerDiv {
